@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.shortcuts import render
@@ -39,6 +39,11 @@ def calculator_view(request):
     else:
         form = CalculatorForm()
 
-    history = Calculation.objects.order_by('-created_at')[:10]
+    history = Calculation.objects.order_by('-created_at')
 
     return render(request, 'calculator.html', {'form': form, 'result': result, 'history': history, 'error': error})
+
+def clear_history(request):
+    if request.method == "POST":
+        Calculation.objects.all().delete()
+    return redirect('calculator')

@@ -5,14 +5,37 @@
     <title>My pet calculator</title>
     <style>
         .container {
+            display: flex;
+            justify-content: center;
+            /*gap: 20px;*/
+            margin-top: 50px;
+        }
+
+        .calculator {
             width: 300px;
-            margin: 0 auto;
+        }
+
+        .history {
+            width: 300px;
+            /*border: 1px solid #ccc;*/
+        }
+
+        .history ul {
+            border: 1px solid #ccc;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .clear_but {
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <div>
+    <div class="calculator">
         <h1>Simple calculator</h1>
 
         <form method="post">
@@ -27,8 +50,8 @@
         <h2>Result: {{ result }}</h2>
         {% endif %}
     </div>
-    <div>
-        <h2>History</h2>
+    <div class="history">
+        <h1>History</h1>
 
         <ul>
             {% for item in history %}
@@ -44,6 +67,14 @@
             <li>No calculations yet</li>
             {% endfor %}
         </ul>
+
+        <div class="clear_but">
+            <form method="post" action="{% url 'clear_history' %}">
+                {% csrf_token %}
+                <button type="submit">Clear history</button>
+            </form>
+        </div>
+
     </div>
 </div>
 </body>

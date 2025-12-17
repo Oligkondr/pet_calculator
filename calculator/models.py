@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -9,6 +10,8 @@ class Calculation(models.Model):
         ('mul', 'Multiplication'),
         ('div', 'Division'),
     ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='calculations')
 
     number1 = models.FloatField()
     number2 = models.FloatField()

@@ -3,10 +3,13 @@ from django.shortcuts import render
 # Create your views here.
 from django.shortcuts import render
 from .forms import CalculatorForm
+from .models import Calculation
 
 
 def calculator_view(request):
     result = None
+    error = None
+
     if request.method == "POST":
         form = CalculatorForm(request.POST)
         if form.is_valid():
@@ -24,8 +27,18 @@ def calculator_view(request):
                 if number2 != 0:
                     result = number1 / number2
                 else:
-                    result = "Zero division!"
+                    error = "Zero division!"
+
+            Calculation.objects.create(
+                number1=number1,
+                number2=number2,
+                operation=operation,
+                result=result,
+                error=error
+            )
     else:
         form = CalculatorForm()
 
-    return render(request, 'calculator.html', {'form': form, 'result': result})
+    history = Calculation.objects.order_by('-created_at')[:10]
+
+    return render(request, 'calculator.html', {'form': form, 'result': result, 'history': history, 'error': error})

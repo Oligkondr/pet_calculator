@@ -3,17 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <title>My pet calculator</title>
+    <style>
+        .container {
+            width: 300px;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body>
-    <h1>Simple calculator</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Calculate</button>
-    </form>
+<div class="container">
+    <div>
+        <h1>Simple calculator</h1>
 
-    {% if result is not None %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Calculate</button>
+        </form>
+
+        {% if error %}
+        <h2 style="color: red;">{{ error }}</h2>
+        {% elif result is not None %}
         <h2>Result: {{ result }}</h2>
-    {% endif %}
+        {% endif %}
+    </div>
+    <div>
+        <h2>History</h2>
+
+        <ul>
+            {% for item in history %}
+            <li>
+                {{ item.number1 }} {{ item.get_operation_display }} {{ item.number2 }} =
+                {% if item.error %}
+                <span style="color: red;">{{ item.error }}</span>
+                {% else %}
+                {{ item.result }}
+                {% endif %}
+            </li>
+            {% empty %}
+            <li>No calculations yet</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 </body>
 </html>
